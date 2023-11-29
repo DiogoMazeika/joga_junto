@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:joga_junto/core/busca.dart';
 // import 'package:rpg_andriod/banco/comandos.dart';
 // import 'package:rpg_andriod/objetos/item.dart';
 // import 'package:rpg_andriod/objetos/load.dart';
@@ -47,18 +50,7 @@ class TelaInicio extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: Color(0XFFF4F3F3),
-                  ),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 5,
-                    itemBuilder: (contextList, i) {
-                      return cardLocal(i, box);
-                    },
-                  ),
-                ),
+                child: _ListLocais(box: box),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
@@ -100,6 +92,140 @@ class TelaInicio extends StatelessWidget {
           child: menuLateral(context),
         );
       }),
+    );
+  }
+
+  Widget menuLateral(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 18),
+      child: Column(
+        children: [
+          menuLateralButton(
+            Icons.person_outline,
+            'Perfil',
+            () {
+              Navigator.pushNamed(context, '/perfil');
+            },
+          ),
+          menuLateralButton(
+            Icons.settings_outlined,
+            'Configurações',
+            () {
+              Navigator.pushNamed(context, '/config');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget menuLateralButton(IconData icone, String txt, Function onClick) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 22),
+      child: GestureDetector(
+        onTap: () {
+          onClick();
+        },
+        child: Row(
+          children: [
+            Expanded(
+              child: Icon(
+                icone,
+                size: 40,
+                color: mainCor,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(
+                txt,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: mainCor,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget menuInferiorButton(String txt, Function onClick) {
+    return GestureDetector(
+      onTap: () {
+        onClick();
+      },
+      child: Center(
+        child: Text(
+          txt,
+          style: const TextStyle(
+            fontSize: 18,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ListLocais extends StatefulWidget {
+  const _ListLocais({Key? key, required this.box}) : super(key: key);
+
+  final BoxConstraints box;
+
+  @override
+  State<_ListLocais> createState() => _ListLocaisState();
+}
+
+class _ListLocaisState extends State<_ListLocais> {
+  late Busca<Map> userDados;
+
+  @override
+  void initState() {
+    super.initState();
+    _initVars();
+  }
+
+  void _initVars() {
+    userDados = Busca(
+        dados: {},
+        requisicao: () async {
+          return {
+            'nome': 'user',
+            'cpf': '000.000.000-00',
+            'telefone': '00 00000-0000',
+            'email': 'jose@gmail.com',
+            'senha': 'senha',
+          };
+        })
+      ..addListener(_update)
+      ..buscar();
+  }
+
+  void _update() {
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    userDados.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: Color(0XFFF4F3F3),
+      ),
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: 5,
+        itemBuilder: (contextList, i) {
+          return cardLocal(i, widget.box);
+        },
+      ),
     );
   }
 
@@ -180,6 +306,23 @@ class TelaInicio extends StatelessWidget {
                     ],
                   ),
                 ),
+                SizedBox(
+                  width: (box.maxWidth * 30) / 100,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: localEsportes(
+                      [
+                        Icons.sports_volleyball_outlined,
+                        Icons.sports_baseball_outlined,
+                        // sports_baseball_outlined
+                        // sports_basketball_outlined
+                        // sports_soccer_outlined
+                        // sports_tennis_outlined
+                        // sports_volleyball_outlined
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -190,106 +333,30 @@ class TelaInicio extends StatelessWidget {
 
   Widget localEsportes(List itens) {
     return ListView.builder(
-      itemCount: itens.length,
+      itemCount: min(2, (itens.length / 2).ceil()),
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, i) {
-        Map item = {};
-        Map itemProx = {};
-        if (i % 2 == 0 && i < itens.length) {
-          item = itens[i];
+        IconData? item;
+        IconData? itemProx;
+        if (i * 2 % 2 == 0 && i * 2 < itens.length) {
+          item = itens[i * 2];
 
-          if (i + 1 == 3) {
-            itemProx = itens[i + 1]; // +
-          } else if (i + 1 < itens.length) {
-            itemProx = itens[i + 1];
+          if ((i * 2 + 1) >= 3 && i * 2 + 1 < itens.length) {
+            itemProx = Icons.more_horiz;
+          } else if (i * 2 + 1 < itens.length) {
+            itemProx = itens[i * 2 + 1];
           }
         }
-        return i % 2 > 0
-            ? null
+        return i * 2 % 2 > 0
+            ? Text("")
             : Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text('aqui'),
-                  // Icon(IconData)
-                  // sports_baseball
-                  // sports_basketball
-                  // sports_soccer
-                  // sports_tennis
-                  // sports_volleyball
+                  if (item != null) Icon(item),
+                  if (itemProx != null) Icon(itemProx),
                 ],
               );
       },
-    );
-  }
-
-  Widget menuLateral(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 18),
-      child: Column(
-        children: [
-          menuLateralButton(
-            Icons.person_outline,
-            'Perfil',
-            () {
-              Navigator.pushNamed(context, '/perfil');
-            },
-          ),
-          menuLateralButton(
-            Icons.settings_outlined,
-            'Configurações',
-            () {
-              Navigator.pushNamed(context, '/config');
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget menuLateralButton(IconData icone, String txt, Function onClick) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 22),
-      child: GestureDetector(
-        onTap: () {
-          onClick();
-        },
-        child: Row(
-          children: [
-            Expanded(
-              child: Icon(
-                icone,
-                size: 40,
-                color: mainCor,
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Text(
-                txt,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: mainCor,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget menuInferiorButton(String txt, Function onClick) {
-    return GestureDetector(
-      onTap: () {
-        onClick();
-      },
-      child: Center(
-        child: Text(
-          txt,
-          style: const TextStyle(
-            fontSize: 18,
-          ),
-        ),
-      ),
     );
   }
 }
