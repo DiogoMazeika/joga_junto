@@ -14,3 +14,12 @@ Map<int, Color> mainCorSwatch = {
   800: mainCor.withOpacity(0.9),
   900: mainCor.withOpacity(1.0),
 };
+
+Map<String, IconData> iconsMap = {
+  'baseball': Icons.sports_baseball_outlined,
+  'basquete': Icons.sports_basketball_outlined,
+  'futebol': Icons.sports_soccer_outlined,
+  'tenis': Icons.sports_tennis_outlined,
+  'volei': Icons.sports_volleyball_outlined,
+  '...': Icons.more_horiz,
+};
