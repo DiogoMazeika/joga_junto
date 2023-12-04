@@ -21,5 +21,8 @@ Map<String, IconData> iconsMap = {
   'futebol': Icons.sports_soccer_outlined,
   'tenis': Icons.sports_tennis_outlined,
   'volei': Icons.sports_volleyball_outlined,
+  'tryhard': Icons.local_fire_department_rounded,
+  '4fun': Icons.mood_rounded,
+  'pago': Icons.payments,
   '...': Icons.more_horiz,
 };

@@ -7,21 +7,25 @@ class PrimeiraVez extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: PageViewExample(),
+      body: _Apresentacao(),
     );
   }
 }
 
-class PageViewExample extends StatelessWidget {
-  const PageViewExample({super.key});
+class _Apresentacao extends StatefulWidget {
+  const _Apresentacao({super.key});
+
+  @override
+  State<_Apresentacao> createState() => _ApresentacaoState();
+}
+
+class _ApresentacaoState extends State<_Apresentacao> {
+  final PageController controller = PageController();
 
   @override
   Widget build(BuildContext context) {
-    final PageController controller = PageController();
     return LayoutBuilder(builder: (context, box) {
       return PageView(
-        /// [PageView.scrollDirection] defaults to [Axis.horizontal].
-        /// Use [Axis.vertical] to scroll vertically.
         controller: controller,
         children: [
           pagina(
@@ -54,7 +58,7 @@ class PageViewExample extends StatelessWidget {
             2,
             controller,
           ),
-          TelaPadrao(),
+          const TelaPadrao(),
         ],
       );
     });
@@ -97,11 +101,12 @@ class PageViewExample extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+          SizedBox(
+            width: box.maxWidth,
+            height: (box.maxHeight * 35) / 100,
             child: Image.asset(
               'assets/img_primeira_vez_$p.png', // img
-              width: (box.maxWidth * 85) / 100,
+              // width: (box.maxWidth * 85) / 100,
             ),
           ),
           Expanded(

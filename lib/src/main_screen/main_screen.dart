@@ -1,10 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:joga_junto/core/busca.dart';
-// import 'package:rpg_andriod/banco/comandos.dart';
-// import 'package:rpg_andriod/objetos/item.dart';
-// import 'package:rpg_andriod/objetos/load.dart';
 import 'package:joga_junto/default/default_values.dart';
 
 class MainScreen extends StatelessWidget {
@@ -45,12 +41,22 @@ class MainScreen extends StatelessWidget {
       ),
       body: Container(
         alignment: Alignment.center,
-        child: LayoutBuilder(builder: (context, box) {
+        child: LayoutBuilder(builder: (contextB, box) {
           return Column(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: _ListLocais(box: box),
+                child: _ListLocais(
+                    box: box,
+                    navigate: (int? id) {
+                      if (id != null) {
+                        Navigator.pushNamed(
+                          context,
+                          '/local',
+                          arguments: <String, dynamic>{'id': id},
+                        );
+                      }
+                    }),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
@@ -170,9 +176,11 @@ class MainScreen extends StatelessWidget {
 }
 
 class _ListLocais extends StatefulWidget {
-  const _ListLocais({Key? key, required this.box}) : super(key: key);
+  const _ListLocais({Key? key, required this.box, required this.navigate})
+      : super(key: key);
 
   final BoxConstraints box;
+  final Function navigate;
 
   @override
   State<_ListLocais> createState() => _ListLocaisState();
@@ -193,11 +201,19 @@ class _ListLocaisState extends State<_ListLocais> {
         requisicao: () async {
           return [
             {
+              'id': 1,
               'img': 'img.png',
               'nome': 'nome',
               'onde': 'onde',
               'esportes_quadras': []
-            }
+            },
+            {
+              'id': 2,
+              'img': 'img.png',
+              'nome': 'nome2',
+              'onde': 'onde2',
+              'esportes_quadras': ['futebol']
+            },
           ];
         })
       ..addListener(_update)
@@ -235,6 +251,7 @@ class _ListLocaisState extends State<_ListLocais> {
   }
 
   Widget cardLocal(Map local, BoxConstraints box) {
+    int id = int.tryParse(local['id']?.toString() ?? '') ?? -1;
     String img = local['img']?.toString() ?? '-';
     String nome = local['nome']?.toString() ?? '-';
     String onde = local['onde']?.toString() ?? '-';
@@ -249,92 +266,90 @@ class _ListLocaisState extends State<_ListLocais> {
         horizontal: 12,
         vertical: 15,
       ),
-      child: SizedBox(
-        height: 122,
-        child: DecoratedBox(
-          decoration: const BoxDecoration(
-            color: Color(0XFFFFFFFF),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0XFF000000),
-                spreadRadius: .33,
-                blurRadius: 2,
-              ),
-            ],
-            borderRadius: BorderRadius.all(
-              Radius.circular(22),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 12,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: mainCor, width: 5),
-                      borderRadius: BorderRadius.circular(
-                        100,
-                      ),
-                    ),
-                    child: Image.asset(
-                      'assets/warning.png', // img
-                      width: (box.maxWidth * 15) / 100,
-                    ),
-                  ),
+      child: GestureDetector(
+        onTap: () {
+          widget.navigate(id);
+        },
+        child: SizedBox(
+          height: 122,
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              color: Color(0XFFFFFFFF),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0XFF000000),
+                  spreadRadius: .33,
+                  blurRadius: 2,
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 3),
-                        child: Text(
-                          nome,
-                          style: const TextStyle(
-                            fontSize: 28,
-                            color: Color(0XFF595959),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.location_on,
-                            color: mainCor,
-                          ),
-                          Text(onde),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 9,
-                          top: 6,
-                        ),
-                        child: Text(esportes.length.toString()),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: (box.maxWidth * 30) / 100,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: localEsportes(esportes),
-                    // Icons.sports_volleyball_outlined,
-                    // Icons.sports_baseball_outlined,
-                    // sports_baseball_outlined
-                    // sports_basketball_outlined
-                    // sports_soccer_outlined
-                    // sports_tennis_outlined
-                    // sports_volleyball_outlined
-                  ),
-                )
               ],
+              borderRadius: BorderRadius.all(
+                Radius.circular(22),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 12,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: mainCor, width: 5),
+                        borderRadius: BorderRadius.circular(
+                          100,
+                        ),
+                      ),
+                      child: Image.asset(
+                        'assets/warning.png', // img
+                        width: (box.maxWidth * 15) / 100,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 3),
+                          child: Text(
+                            nome,
+                            style: const TextStyle(
+                              fontSize: 28,
+                              color: Color(0XFF595959),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              color: mainCor,
+                            ),
+                            Text(onde),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 9,
+                            top: 6,
+                          ),
+                          child: Text(esportes.length.toString()),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: (box.maxWidth * 30) / 100,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: localEsportes(esportes),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

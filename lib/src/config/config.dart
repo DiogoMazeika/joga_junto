@@ -55,7 +55,7 @@ class _ConfigState extends State<Config> {
               padding: const EdgeInsets.all(12),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushNamed(context, '/main');
                 },
                 child: const Icon(Icons.arrow_back_ios),
               ),

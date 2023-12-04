@@ -9,7 +9,7 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
-  late Busca<Map> userDados;
+  late Busca<Map> userData;
 
   @override
   void initState() {
@@ -18,7 +18,7 @@ class _PerfilState extends State<Perfil> {
   }
 
   void _initVars() {
-    userDados = Busca(
+    userData = Busca(
         dados: {},
         requisicao: () async {
           return {
@@ -40,7 +40,7 @@ class _PerfilState extends State<Perfil> {
   @override
   void dispose() {
     super.dispose();
-    userDados.dispose();
+    userData.dispose();
   }
 
   @override
@@ -55,7 +55,7 @@ class _PerfilState extends State<Perfil> {
               padding: const EdgeInsets.all(12),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushNamed(context, '/main');
                 },
                 child: const Icon(Icons.arrow_back_ios),
               ),
@@ -64,31 +64,31 @@ class _PerfilState extends State<Perfil> {
               child: Text('Nome:'),
             ),
             Center(
-              child: Text(userDados.dados['nome']?.toString() ?? '-'),
+              child: Text(userData.dados['nome']?.toString() ?? '-'),
             ),
             const Center(
               child: Text('CPF:'),
             ),
             Center(
-              child: Text(userDados.dados['cpf']?.toString() ?? '-'),
+              child: Text(userData.dados['cpf']?.toString() ?? '-'),
             ),
             const Center(
               child: Text('Telefone celular:'),
             ),
             Center(
-              child: Text(userDados.dados['telefone']?.toString() ?? '-'),
+              child: Text(userData.dados['telefone']?.toString() ?? '-'),
             ),
             const Center(
               child: Text('E-mail:'),
             ),
             Center(
-              child: Text(userDados.dados['email']?.toString() ?? '-'),
+              child: Text(userData.dados['email']?.toString() ?? '-'),
             ),
             const Center(
               child: Text('Senha:'),
             ),
             Center(
-              child: Text(userDados.dados['senha']?.toString() ?? '-'),
+              child: Text(userData.dados['senha']?.toString() ?? '-'),
             ),
           ],
         ),
