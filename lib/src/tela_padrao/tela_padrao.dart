@@ -2,13 +2,29 @@ import 'package:joga_junto/default/default_values.dart';
 import 'package:flutter/material.dart';
 
 class TelaPadrao extends StatefulWidget {
-  const TelaPadrao({Key? key}) : super(key: key);
+  const TelaPadrao({Key? key, this.isPageView}) : super(key: key);
+
+  final bool? isPageView;
 
   @override
   State<TelaPadrao> createState() => _TelaPadraoState();
 }
 
 class _TelaPadraoState extends State<TelaPadrao> {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isPageView ?? true) return const _tela();
+    return const Scaffold(
+      body: _tela(),
+    );
+  }
+}
+
+class _tela extends StatelessWidget {
+  const _tela({
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, box) {
@@ -56,7 +72,9 @@ class _TelaPadraoState extends State<TelaPadrao> {
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/login/novaConta');
+                },
                 style: ButtonStyle(
                   backgroundColor: const MaterialStatePropertyAll(
                     Color(0XFFFFFFFF),
@@ -83,7 +101,7 @@ class _TelaPadraoState extends State<TelaPadrao> {
               padding: const EdgeInsets.only(bottom: 22),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/main');
+                  Navigator.pushNamed(context, '/login');
                 },
                 style: ButtonStyle(
                   backgroundColor: const MaterialStatePropertyAll(

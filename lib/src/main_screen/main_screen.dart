@@ -117,8 +117,17 @@ class MainScreen extends StatelessWidget {
             Icons.settings_outlined,
             'Configurações',
             () {
-              Navigator.pushNamed(context, '/config');
+              // Navigator.pushNamed(context, '/config');
             },
+          ),
+          Expanded(
+            child: menuLateralButton(
+              Icons.logout_rounded,
+              'Sair',
+              () {
+                Navigator.pushNamed(context, '/');
+              },
+            ),
           ),
         ],
       ),
@@ -133,22 +142,23 @@ class MainScreen extends StatelessWidget {
           onClick();
         },
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
               child: Icon(
                 icone,
                 size: 40,
-                color: mainCor,
+                color: txt == 'Sair' ? const Color(0XFFFF3B3B) : mainCor,
               ),
             ),
             Expanded(
               flex: 2,
               child: Text(
                 txt,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: mainCor,
+                  color: txt == 'Sair' ? const Color(0XFFFF3B3B) : mainCor,
                 ),
               ),
             ),
@@ -169,6 +179,7 @@ class MainScreen extends StatelessWidget {
           style: const TextStyle(
             fontSize: 18,
           ),
+          textAlign: TextAlign.center,
         ),
       ),
     );

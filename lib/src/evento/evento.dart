@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:joga_junto/core/busca.dart';
 import 'package:joga_junto/default/default_values.dart';
 
-class Quadra extends StatefulWidget {
-  const Quadra({super.key});
+class Evento extends StatefulWidget {
+  const Evento({super.key});
 
   @override
-  State<Quadra> createState() => _QuadraState();
+  State<Evento> createState() => _EventoState();
 }
 
-class _QuadraState extends State<Quadra> {
+class _EventoState extends State<Evento> {
   late Busca<Map> quadraData;
 
   Map? selectedDia;
@@ -28,13 +28,10 @@ class _QuadraState extends State<Quadra> {
         requisicao: () async {
           return {
             'nome': 'Quadra 1',
-            'endereco': 'Rua asldsaoidhsad dasjk bdasdbuasbuoavq',
+            'endereco': 'Rua asldsaoidhsad',
             'valor': 'Gratuito',
             'equipamento': 'equipamento',
-            'esportes': [
-              'baseball',
-              'volei',
-            ],
+            'esportes': ['futebol'],
             'dias_disponiveis': [
               {
                 'label': '22/10/2023',
@@ -134,7 +131,7 @@ class _QuadraState extends State<Quadra> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Center(
                   child: Text(
                     'Endereço: $endereco',
@@ -147,9 +144,59 @@ class _QuadraState extends State<Quadra> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 80 * esportes.length / 2,
-                child: _esportes(esportes),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: ((box.maxWidth * 48) / 100) - 5,
+                    child: const Text(
+                      '05/10',
+                      style: TextStyle(
+                        color: mainCor,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(
+                    width: ((box.maxWidth * 48) / 100) - 5,
+                    child: const Text(
+                      'Basquete',
+                      style: TextStyle(
+                        color: mainCor,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: ((box.maxWidth * 48) / 100) - 5,
+                    child: const Text(
+                      '10:15',
+                      style: TextStyle(
+                        color: mainCor,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(
+                    width: ((box.maxWidth * 48) / 100) - 5,
+                    child: const Icon(
+                      Icons.sports_baseball_outlined,
+                      color: mainCor,
+                      size: 70,
+                    ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -161,6 +208,7 @@ class _QuadraState extends State<Quadra> {
                       'Valor:',
                       style: TextStyle(
                         color: mainCor,
+                        fontSize: 18,
                       ),
                       // textAlign: TextAlign.end,
                     ),
@@ -169,6 +217,7 @@ class _QuadraState extends State<Quadra> {
                       valor ?? 'Gratuito',
                       style: const TextStyle(
                         color: mainCor,
+                        fontSize: 18,
                       ),
                       // textAlign: TextAlign.start,
                     ),
@@ -184,6 +233,7 @@ class _QuadraState extends State<Quadra> {
                     'Equipamento:',
                     style: TextStyle(
                       color: mainCor,
+                      fontSize: 18,
                     ),
                     // textAlign: TextAlign.end,
                   ),
@@ -192,79 +242,54 @@ class _QuadraState extends State<Quadra> {
                     equipamento,
                     style: const TextStyle(
                       color: mainCor,
+                      fontSize: 18,
                     ),
                     // textAlign: TextAlign.start,
                   ),
                   const Expanded(child: Center()),
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 32),
-                child: Center(
-                  child: Text('Dias Disponiveis'),
-                ),
-              ),
-              Center(
-                child: _SelectAgendamento(
-                  opts: diasDisp,
-                  valor: selectedDia,
-                  onChange: (Map valor) {
-                    print(valor);
-                    setState(() {
-                      selectedDia = valor;
-                      horasDisp = valor['horarios'];
-                    });
-                  },
-                ),
-              ),
-              // if (horasDisp is List)
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Center(
-                  child: Text('Horários Disponiveis'),
-                ),
-              ),
-              // if (horasDisp is List)
-              Center(
-                child: _SelectAgendamento(
-                  opts: horasDisp ?? [],
-                  valor: selectedHora,
-                  onChange: (Map valor) {
-                    setState(() {
-                      selectedHora = valor;
-                    });
-                  },
-                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 28),
+                child: Row(children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: mainCor, width: 3),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(13),
+                      child: Icon(Icons.group),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 6),
+                    child: Text(
+                      '99/100',
+                      style: TextStyle(color: mainCor, fontSize: 20),
+                    ),
+                  ),
+                ]),
               ),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 22),
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (selectedDia == null) {
-                        _alertErro(context, 'dia');
-                      } else if (selectedHora == null) {
-                        _alertErro(context, 'horario');
-                      } else {
-                        Navigator.pushNamed(
-                          context,
-                          '/criarEvento',
-                          arguments: <String, dynamic>{
-                            'dia': selectedDia!['label'],
-                            'hora': selectedHora!['label'],
-                            'id_quadra': id,
-                            'id_local': idOrigem,
-                          },
-                        );
-                      }
+                      print('aa');
                     },
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(
                         Size(((box.maxWidth * 65) / 100), 55),
                       ),
+                      shape: MaterialStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
                     ),
                     child: const Text(
-                      'Agendar',
+                      'Entrar',
                     ),
                   ),
                 ),
@@ -294,19 +319,17 @@ class _QuadraState extends State<Quadra> {
         return i * 2 % 2 > 0
             ? const Text("")
             : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (item != null)
                     Icon(
                       iconsMap[item],
                       color: mainCor,
-                      size: 42,
                     ),
                   if (itemProx != null)
                     Icon(
                       iconsMap[itemProx],
                       color: mainCor,
-                      size: 42,
                     ),
                 ],
               );
@@ -341,7 +364,6 @@ class _SelectAgendamento extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int i = -1;
-    List<int> items = [];
     return DropdownButton<String>(
       value: (valor ?? {})['label'],
       onChanged: (String? vl) {
@@ -350,8 +372,7 @@ class _SelectAgendamento extends StatelessWidget {
         }
       },
       items: opts.map<DropdownMenuItem<String>>((vl) {
-        if (vl != null && !items.contains(i)) {
-          items.add(i);
+        if (vl != null) {
           i++;
           return DropdownMenuItem(
             value: i.toString(),

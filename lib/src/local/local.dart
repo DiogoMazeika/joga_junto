@@ -32,6 +32,7 @@ class _LocalState extends State<Local> {
             'nome': 'Univille - Campus Joinville Bom Retiro',
             'eventos': [
               {
+                'id': 1,
                 'nome': 'aa',
                 'horario': '10:15 - 14:00',
                 'esportes': ['futebol', 'volei', 'basquete'],
@@ -42,6 +43,7 @@ class _LocalState extends State<Local> {
             ],
             'quadras': [
               {
+                'id': 1,
                 'nome': 'aa',
                 'horario': '14:15 - 23:59',
                 'esportes': ['futebol', 'volei', 'basquete'],
