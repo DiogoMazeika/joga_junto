@@ -28,7 +28,7 @@ class _EventoState extends State<Evento> {
         requisicao: () async {
           return {
             'nome': 'Quadra 1',
-            'endereco': 'Rua asldsaoidhsad',
+            'endereco': 'Rua Blumenau',
             'valor': 'Gratuito',
             'equipamento': 'equipamento',
             'esportes': ['futebol'],
@@ -131,7 +131,7 @@ class _EventoState extends State<Evento> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 40),
                 child: Center(
                   child: Text(
                     'Endereço: $endereco',
@@ -144,34 +144,37 @@ class _EventoState extends State<Evento> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: ((box.maxWidth * 48) / 100) - 5,
-                    child: const Text(
-                      '05/10',
-                      style: TextStyle(
-                        color: mainCor,
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: ((box.maxWidth * 48) / 100) - 5,
+                      child: const Text(
+                        '05/10',
+                        style: TextStyle(
+                          color: mainCor,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  SizedBox(
-                    width: ((box.maxWidth * 48) / 100) - 5,
-                    child: const Text(
-                      'Basquete',
-                      style: TextStyle(
-                        color: mainCor,
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
+                    SizedBox(
+                      width: ((box.maxWidth * 48) / 100) - 5,
+                      child: const Text(
+                        'Basquete',
+                        style: TextStyle(
+                          color: mainCor,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -273,7 +276,7 @@ class _EventoState extends State<Evento> {
               ),
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 22),
+                  padding: const EdgeInsets.only(top: 38),
                   child: ElevatedButton(
                     onPressed: () async {
                       print('aa');

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:joga_junto/core/busca.dart';
 import 'package:joga_junto/default/default_values.dart';
+import 'package:joga_junto/src/quadra/controller.dart';
 
 class Quadra extends StatefulWidget {
   const Quadra({super.key});
@@ -10,6 +11,7 @@ class Quadra extends StatefulWidget {
 }
 
 class _QuadraState extends State<Quadra> {
+  final Controller controller = Controller();
   late Busca<Map> quadraData;
 
   Map? selectedDia;
@@ -26,25 +28,8 @@ class _QuadraState extends State<Quadra> {
     quadraData = Busca(
         dados: {},
         requisicao: () async {
-          return {
-            'nome': 'Quadra 1',
-            'endereco': 'Rua asldsaoidhsad dasjk bdasdbuasbuoavq',
-            'valor': 'Gratuito',
-            'equipamento': 'equipamento',
-            'esportes': [
-              'baseball',
-              'volei',
-            ],
-            'dias_disponiveis': [
-              {
-                'label': '22/10/2023',
-                'horarios': [
-                  {'label': '10:00'},
-                  {'label': '11:00'},
-                ]
-              },
-            ],
-          };
+          return {};
+          // return await controller.getQuadra;
         })
       ..addListener(_update)
       ..buscar();
@@ -209,7 +194,6 @@ class _QuadraState extends State<Quadra> {
                   opts: diasDisp,
                   valor: selectedDia,
                   onChange: (Map valor) {
-                    print(valor);
                     setState(() {
                       selectedDia = valor;
                       horasDisp = valor['horarios'];
@@ -217,14 +201,12 @@ class _QuadraState extends State<Quadra> {
                   },
                 ),
               ),
-              // if (horasDisp is List)
               const Padding(
                 padding: EdgeInsets.only(top: 20),
                 child: Center(
                   child: Text('Horários Disponiveis'),
                 ),
               ),
-              // if (horasDisp is List)
               Center(
                 child: _SelectAgendamento(
                   opts: horasDisp ?? [],
@@ -340,27 +322,15 @@ class _SelectAgendamento extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int i = -1;
-    List<int> items = [];
     return DropdownButton<String>(
       value: (valor ?? {})['label'],
       onChanged: (String? vl) {
-        if (vl != null) {
-          onChange(opts[int.parse(vl)]);
-        }
+        onChange(opts.firstWhere((ele) => ele['label'] == vl));
       },
       items: opts.map<DropdownMenuItem<String>>((vl) {
-        if (vl != null && !items.contains(i)) {
-          items.add(i);
-          i++;
-          return DropdownMenuItem(
-            value: i.toString(),
-            child: Text(vl['label']?.toString() ?? '-'),
-          );
-        }
         return DropdownMenuItem(
-          value: i.toString(),
-          child: const Text('-'),
+          value: (vl ?? {})['label']?.toString() ?? '-',
+          child: Text((vl ?? {})['label']?.toString() ?? '-'),
         );
       }).toList(),
     );

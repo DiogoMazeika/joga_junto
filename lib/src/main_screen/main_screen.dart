@@ -2,10 +2,17 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:joga_junto/core/busca.dart';
 import 'package:joga_junto/default/default_values.dart';
+import 'package:joga_junto/src/main_screen/controller.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  final Controller controller = Controller();
   @override
   Widget build(BuildContext context) {
     /* Comandos().buscaLoad().then((loads) {
@@ -47,6 +54,7 @@ class MainScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: _ListLocais(
+                    controller: controller,
                     box: box,
                     navigate: (int? id) {
                       if (id != null) {
@@ -110,7 +118,7 @@ class MainScreen extends StatelessWidget {
             Icons.person_outline,
             'Perfil',
             () {
-              Navigator.pushNamed(context, '/perfil');
+              // Navigator.pushNamed(context, '/perfil');
             },
           ),
           menuLateralButton(
@@ -187,9 +195,14 @@ class MainScreen extends StatelessWidget {
 }
 
 class _ListLocais extends StatefulWidget {
-  const _ListLocais({Key? key, required this.box, required this.navigate})
+  const _ListLocais(
+      {Key? key,
+      required this.box,
+      required this.navigate,
+      required this.controller})
       : super(key: key);
 
+  final Controller controller;
   final BoxConstraints box;
   final Function navigate;
 
@@ -210,22 +223,7 @@ class _ListLocaisState extends State<_ListLocais> {
     locais = Busca(
         dados: [],
         requisicao: () async {
-          return [
-            {
-              'id': 1,
-              'img': 'img.png',
-              'nome': 'nome',
-              'onde': 'onde',
-              'esportes_quadras': []
-            },
-            {
-              'id': 2,
-              'img': 'img.png',
-              'nome': 'nome2',
-              'onde': 'onde2',
-              'esportes_quadras': ['futebol']
-            },
-          ];
+          return await widget.controller.getLocais();
         })
       ..addListener(_update)
       ..buscar();

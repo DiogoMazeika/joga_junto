@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:joga_junto/src/login/controller.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -8,6 +9,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final Controller controller = Controller();
   String email = "";
   String senha = "";
   @override
@@ -69,7 +71,26 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.entrar(email, senha).then((login) {
+                      if ('${login['ok']}' == 'true') {
+                        Navigator.pushNamed(context, '/main');
+                      } else {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            content: const Text('Email ou senha errados!'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    });
+                  },
                   style: ButtonStyle(
                     fixedSize: MaterialStatePropertyAll(
                       Size(box.maxWidth - 44, 44),

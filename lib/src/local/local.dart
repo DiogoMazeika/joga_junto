@@ -33,7 +33,7 @@ class _LocalState extends State<Local> {
             'eventos': [
               {
                 'id': 1,
-                'nome': 'aa',
+                'nome': 'eventasso',
                 'horario': '10:15 - 14:00',
                 'esportes': ['futebol', 'volei', 'basquete'],
                 'confirmados': '100/100',
@@ -44,7 +44,7 @@ class _LocalState extends State<Local> {
             'quadras': [
               {
                 'id': 1,
-                'nome': 'aa',
+                'nome': 'Quadra 1',
                 'horario': '14:15 - 23:59',
                 'esportes': ['futebol', 'volei', 'basquete'],
                 'pago': 'true'

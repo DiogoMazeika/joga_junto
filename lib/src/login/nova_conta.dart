@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:joga_junto/src/login/controller.dart';
 
 class NovaConta extends StatefulWidget {
   const NovaConta({Key? key}) : super(key: key);
@@ -9,13 +10,15 @@ class NovaConta extends StatefulWidget {
 }
 
 class _NovaContaState extends State<NovaConta> {
-  String nome = "a"; // "";
-  String cpf = "a"; // "";
-  String dataNasc = "a"; // "";
-  String tel = "a"; // "";
-  String email = "a"; // "";
-  String senha = "a"; // "";
-  String senhaConfirma = "a"; // "";
+  final Controller controller = Controller();
+
+  String nome = "";
+  String cpf = "";
+  String dataNasc = "";
+  String tel = "";
+  String email = "";
+  String senha = "";
+  String senhaConfirma = "";
   String? nomeErro;
   String? cpfErro;
   String? dataNascErro;
@@ -145,7 +148,7 @@ class _NovaContaState extends State<NovaConta> {
               padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (nome == "") {
                       setState(() {
                         nomeErro = 'Insira um nome válido';
@@ -183,20 +186,13 @@ class _NovaContaState extends State<NovaConta> {
                       return;
                     }
 
-                    print('nome $nome');
-                    print('cpf $cpf');
-                    print('dataNasc $dataNasc');
-                    print('tel $tel');
-                    print('email $email');
-                    print('senha $senha');
-                    print('senhaConfirma $senhaConfirma');
-
-                    Navigator.pushNamed(context, '/main');
-                    /* Navigator.pushNamed(
-                      context,
-                      '/',
-                      arguments: <String, dynamic>{'id': 1},
-                    ); */
+                    controller
+                        .criarConta(nome, cpf, dataNasc, tel, email, senha)
+                        .then((s) {
+                      if (s) {
+                        Navigator.pushNamed(context, '/main');
+                      }
+                    });
                   },
                   style: ButtonStyle(
                     fixedSize: MaterialStatePropertyAll(
