@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:joga_junto/core/busca.dart';
 import 'package:joga_junto/default/default_values.dart';
+import 'package:joga_junto/src/evento/controller.dart';
 
 class Evento extends StatefulWidget {
   const Evento({super.key});
@@ -10,7 +11,9 @@ class Evento extends StatefulWidget {
 }
 
 class _EventoState extends State<Evento> {
-  late Busca<Map> quadraData;
+  final Controller controller = Controller();
+  late int id;
+  late Busca<Map> eventoData;
 
   Map? selectedDia;
   Map? selectedHora;
@@ -23,25 +26,10 @@ class _EventoState extends State<Evento> {
   }
 
   void _initVars() {
-    quadraData = Busca(
+    eventoData = Busca(
         dados: {},
         requisicao: () async {
-          return {
-            'nome': 'Quadra 1',
-            'endereco': 'Rua Blumenau',
-            'valor': 'Gratuito',
-            'equipamento': 'equipamento',
-            'esportes': ['futebol'],
-            'dias_disponiveis': [
-              {
-                'label': '22/10/2023',
-                'horarios': [
-                  {'label': '10:00'},
-                  {'label': '11:00'},
-                ]
-              },
-            ],
-          };
+          return controller.getEvento(id);
         })
       ..addListener(_update)
       ..buscar();
@@ -54,23 +42,23 @@ class _EventoState extends State<Evento> {
   @override
   void dispose() {
     super.dispose();
-    quadraData.dispose();
+    eventoData.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final int id = int.tryParse(args['id']?.toString() ?? '-1') ?? -1;
+    id = int.tryParse(args['id']?.toString() ?? '-1') ?? -1;
     final int idOrigem =
         int.tryParse(args['id_origem']?.toString() ?? '-1') ?? -1;
     final String origem = args['origem']?.toString() ?? 'main';
 
-    String nome = quadraData.dados['nome']?.toString() ?? '-';
+    String nome = eventoData.dados['nome']?.toString() ?? '-';
     String endereco =
-        quadraData.dados['endereco']?.toString() ?? 'Não informado';
-    String? valor = quadraData.dados['valor']?.toString();
-    String equipamento = quadraData.dados['equipamento']?.toString() ?? '-';
+        eventoData.dados['endereco']?.toString() ?? 'Não informado';
+    String? valor = eventoData.dados['valor']?.toString();
+    String equipamento = eventoData.dados['equipamento']?.toString() ?? '-';
     List esportes = [];
     List diasDisp = [];
 
@@ -81,12 +69,12 @@ class _EventoState extends State<Evento> {
               },
             ], */
 
-    if (quadraData.dados['esportes'] is List) {
-      esportes = quadraData.dados['esportes'];
+    if (eventoData.dados['esportes'] is List) {
+      esportes = eventoData.dados['esportes'];
     }
 
-    if (quadraData.dados['dias_disponiveis'] is List) {
-      diasDisp = quadraData.dados['dias_disponiveis'];
+    if (eventoData.dados['dias_disponiveis'] is List) {
+      diasDisp = eventoData.dados['dias_disponiveis'];
     }
 
     return Scaffold(
@@ -279,7 +267,11 @@ class _EventoState extends State<Evento> {
                   padding: const EdgeInsets.only(top: 38),
                   child: ElevatedButton(
                     onPressed: () async {
-                      print('aa');
+                      controller.entrarEvento(id).then((s) {
+                        if (s) {
+                          Navigator.pushNamed(context, '/main');
+                        }
+                      });
                     },
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(
@@ -301,42 +293,6 @@ class _EventoState extends State<Evento> {
           ),
         );
       }),
-    );
-  }
-
-  Widget _esportes(List itens) {
-    return ListView.builder(
-      itemCount: (itens.length / 2).ceil(),
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, i) {
-        String? item;
-        String? itemProx;
-        if (i * 2 % 2 == 0 && i * 2 < itens.length) {
-          item = itens[i * 2]?.toString() ?? '...';
-
-          if (i * 2 + 1 < itens.length) {
-            itemProx = itens[i * 2 + 1]?.toString() ?? '...';
-          }
-        }
-
-        return i * 2 % 2 > 0
-            ? const Text("")
-            : Row(
-                // mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (item != null)
-                    Icon(
-                      iconsMap[item],
-                      color: mainCor,
-                    ),
-                  if (itemProx != null)
-                    Icon(
-                      iconsMap[itemProx],
-                      color: mainCor,
-                    ),
-                ],
-              );
-      },
     );
   }
 

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:joga_junto/core/busca.dart';
 import 'package:joga_junto/default/default_values.dart';
 import 'package:joga_junto/src/main_screen/controller.dart';
+import 'package:provider/provider.dart';
+import 'package:joga_junto/objetos/notificacao.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -15,20 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   final Controller controller = Controller();
   @override
   Widget build(BuildContext context) {
-    /* Comandos().buscaLoad().then((loads) {
-      for (Load load in loads) {
-        if (load.getId == 1) {
-          // TO DO montar tela de continuar
-          load = Load.setInstance(id: load.getId, nome: load.getNome);
-          Comandos().buscaItensLoad().then((itens) {
-            for (Item element in itens) {
-              print(element.toMap());
-            }
-            return load.atualizaItens(itens);
-          });
-        }
-      }
-    }); */
+    SingleNotifier appState = Provider.of<SingleNotifier>(context);
 
     return Scaffold(
       appBar: AppBar(

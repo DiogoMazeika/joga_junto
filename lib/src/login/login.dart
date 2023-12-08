@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:joga_junto/src/login/controller.dart';
+import 'package:provider/provider.dart';
+import 'package:joga_junto/objetos/notificacao.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, box) {
+      SingleNotifier appState = Provider.of<SingleNotifier>(context);
       return Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,7 +26,7 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.all(12),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/main');
+                  Navigator.pushNamed(context, '/');
                 },
                 child: const Icon(Icons.arrow_back_ios),
               ),
@@ -73,8 +76,13 @@ class _LoginState extends State<Login> {
                 child: ElevatedButton(
                   onPressed: () {
                     controller.entrar(email, senha).then((login) {
-                      if ('${login['ok']}' == 'true') {
-                        Navigator.pushNamed(context, '/main');
+                      print(login);
+                      if ('${login['ok']}' == 'true' && login['id'] != null) {
+                        appState.login(int.parse(login['id'].toString()));
+                        Future.delayed(const Duration(milliseconds: 100))
+                            .then((res) {
+                          Navigator.pushNamed(context, '/main');
+                        });
                       } else {
                         showDialog<String>(
                           context: context,
@@ -125,33 +133,36 @@ class _InputConta extends StatefulWidget {
 
 class _InputContaState extends State<_InputConta> {
   bool mostrar = false;
+  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
       child: Center(
         child: TextField(
+          controller: controller,
           decoration: InputDecoration(
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(80),
-                ),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(80),
               ),
-              hintText: widget.txt,
-              suffix: widget.senha
-                  ? GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          mostrar = !mostrar;
-                        });
-                      },
-                      child: Icon(
-                          mostrar ? Icons.visibility_off : Icons.visibility),
-                    )
-                  : const Icon(null),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 16)),
-          obscureText: mostrar,
+            ),
+            hintText: widget.txt,
+            suffix: widget.senha
+                ? GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        mostrar = !mostrar;
+                      });
+                    },
+                    child:
+                        Icon(mostrar ? Icons.visibility : Icons.visibility_off),
+                  )
+                : const Icon(null),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          ),
+          obscureText: !mostrar && widget.senha,
           onChanged: (vl) {
             widget.onChange(vl);
           },

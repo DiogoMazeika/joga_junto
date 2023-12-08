@@ -12,6 +12,7 @@ class Quadra extends StatefulWidget {
 
 class _QuadraState extends State<Quadra> {
   final Controller controller = Controller();
+  late int id;
   late Busca<Map> quadraData;
 
   Map? selectedDia;
@@ -28,8 +29,7 @@ class _QuadraState extends State<Quadra> {
     quadraData = Busca(
         dados: {},
         requisicao: () async {
-          return {};
-          // return await controller.getQuadra;
+          return await controller.getQuadra(id);
         })
       ..addListener(_update)
       ..buscar();
@@ -49,7 +49,7 @@ class _QuadraState extends State<Quadra> {
   Widget build(BuildContext context) {
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final int id = int.tryParse(args['id']?.toString() ?? '-1') ?? -1;
+    id = int.tryParse(args['id']?.toString() ?? '-1') ?? -1;
     final int idOrigem =
         int.tryParse(args['id_origem']?.toString() ?? '-1') ?? -1;
     final String origem = args['origem']?.toString() ?? 'main';

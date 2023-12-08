@@ -17,7 +17,7 @@ class Controller extends ControllerMain {
           'nome': nome,
           'cpf': cpf,
           'dataNasc': dataNasc,
-          'tel': tel,
+          'telefone': tel,
           'email': email,
           'senha': senha,
         },
@@ -34,13 +34,11 @@ class Controller extends ControllerMain {
   ) async {
     Response dados = await post(
       'login/entrar',
-      data: {'email': email, 'senha': senha},
+      data: {'l': email, 's': senha},
     );
 
-    if (dados.data is Map &&
-        dados.data['status'] == '200' &&
-        dados.data['data'] is Map) {
-      return dados.data['data'];
+    if (dados.data is Map) {
+      return dados.data;
     }
 
     return {'ok': false};

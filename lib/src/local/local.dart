@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:joga_junto/core/busca.dart';
 import 'package:joga_junto/default/default_values.dart';
+import 'package:joga_junto/src/local/controller.dart';
 
 class Local extends StatefulWidget {
   const Local({super.key});
@@ -10,6 +11,8 @@ class Local extends StatefulWidget {
 }
 
 class _LocalState extends State<Local> {
+  final Controller controller = Controller();
+  late int id;
   late Busca<Map> localData;
   late Busca<List> esportes;
   late Busca<List> filtros;
@@ -28,29 +31,7 @@ class _LocalState extends State<Local> {
     localData = Busca(
         dados: {},
         requisicao: () async {
-          return {
-            'nome': 'Univille - Campus Joinville Bom Retiro',
-            'eventos': [
-              {
-                'id': 1,
-                'nome': 'eventasso',
-                'horario': '10:15 - 14:00',
-                'esportes': ['futebol', 'volei', 'basquete'],
-                'confirmados': '100/100',
-                'tipo': '4fun',
-                'pago': 'true'
-              }
-            ],
-            'quadras': [
-              {
-                'id': 1,
-                'nome': 'Quadra 1',
-                'horario': '14:15 - 23:59',
-                'esportes': ['futebol', 'volei', 'basquete'],
-                'pago': 'true'
-              }
-            ],
-          };
+          return controller.getLocal(id);
         })
       ..addListener(_update)
       ..buscar();
@@ -86,7 +67,7 @@ class _LocalState extends State<Local> {
   Widget build(BuildContext context) {
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final int id = int.tryParse(args['id']?.toString() ?? '-1') ?? -1;
+    id = int.tryParse(args['id']?.toString() ?? '-1') ?? -1;
 
     String nome = localData.dados['nome']?.toString() ?? '-';
     List eventos = [];

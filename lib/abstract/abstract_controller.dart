@@ -1,10 +1,14 @@
 import 'package:dio/dio.dart';
 
 class ControllerMain {
+  ControllerMain({this.sessao});
+
   final Dio _dio = Dio();
 
+  final String? sessao;
+
   // Substitua 'https://api.example.com' pela URL da sua API
-  final String api = 'https://www.joga_junto_api.com';
+  final String api = 'http://34.42.197.66:8080';
 
   Future<Response> get(String url,
       {Map<String, dynamic>? data = const {}}) async {
@@ -15,7 +19,12 @@ class ControllerMain {
 
   Future<Response> post(String url,
       {Map<String, dynamic>? data = const {}}) async {
-    Response response = await _dio.post('$api/api/$url', queryParameters: data);
+    _dio.options.headers['cookie'] = 'sessionId=$sessao';
+    Response response = await _dio.post(
+      '$api/api/$url',
+      queryParameters: data,
+      // options: Options(headers: {'Content-Type': 'application/json'})
+    );
 
     return response;
   }

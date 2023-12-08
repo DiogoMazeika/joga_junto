@@ -190,7 +190,7 @@ class _NovaContaState extends State<NovaConta> {
                         .criarConta(nome, cpf, dataNasc, tel, email, senha)
                         .then((s) {
                       if (s) {
-                        Navigator.pushNamed(context, '/main');
+                        Navigator.pushNamed(context, '/');
                       }
                     });
                   },

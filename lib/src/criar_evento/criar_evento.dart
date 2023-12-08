@@ -1,6 +1,7 @@
 import 'package:joga_junto/core/busca.dart';
 import 'package:joga_junto/default/default_values.dart';
 import 'package:flutter/material.dart';
+import 'package:joga_junto/src/criar_evento/controller.dart';
 
 class CriarEvento extends StatefulWidget {
   const CriarEvento({super.key});
@@ -10,6 +11,8 @@ class CriarEvento extends StatefulWidget {
 }
 
 class _CriarEventoState extends State<CriarEvento> {
+  final Controller controller = Controller();
+  late int idQuadra;
   late Busca<Map> quadraData;
 
   @override
@@ -22,22 +25,7 @@ class _CriarEventoState extends State<CriarEvento> {
     quadraData = Busca(
         dados: {},
         requisicao: () async {
-          return {
-            'esportes': [
-              {
-                'label': 'Baseball',
-                'icone': 'baseball',
-              },
-              {
-                'label': 'Volei',
-                'icone': 'volei',
-              },
-              {
-                'label': 'Futebol',
-                'icone': 'futebol',
-              },
-            ],
-          };
+          return controller.getQuadra(idQuadra);
         })
       ..addListener(_update)
       ..buscar();
@@ -63,8 +51,7 @@ class _CriarEventoState extends State<CriarEvento> {
     final int idLocal =
         int.tryParse(args['id_local']?.toString() ?? '-1') ?? -1;
     final String origem = args['origem']?.toString() ?? 'main';
-    final int idQuadra =
-        int.tryParse(args['id_quadra']?.toString() ?? '-1') ?? -1;
+    idQuadra = int.tryParse(args['id_quadra']?.toString() ?? '-1') ?? -1;
 
     final String dia = args['dia']?.toString() ?? "00:00";
     final String hora = args['hora']?.toString() ?? "00:00";
@@ -181,8 +168,21 @@ class _CriarEventoState extends State<CriarEvento> {
                         });
                         return;
                       }
-                      Navigator.pushNamed(context, '/$origem',
-                          arguments: <String, dynamic>{'id': idQuadra});
+                      controller
+                          .criarEvento(
+                        nome,
+                        '${esportes[selectedEsporte]}',
+                        dia,
+                        hora,
+                        idLocal,
+                        idQuadra,
+                      )
+                          .then((s) {
+                        if (s) {
+                          Navigator.pushNamed(context, '/$origem',
+                              arguments: <String, dynamic>{'id': idQuadra});
+                        }
+                      });
                     },
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(
